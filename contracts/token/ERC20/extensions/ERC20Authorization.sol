@@ -150,7 +150,6 @@ abstract contract ERC20Authorization is ERC20, IEIP3009, EIP712 {
             block.timestamp < validBefore,
             "EIP3009: authorization is expired"
         );
-
         bytes32 structHash = keccak256(
             abi.encode(
                 typeHash,

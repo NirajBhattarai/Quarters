@@ -9,7 +9,7 @@ module.exports = {
     hardhat: {},
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/7cd4731a3be74a6ab7c32fe799ab3177",
-      accounts: [""],
+      accounts: [process.env.mnemonic],
       chainId: 4,
       live: true,
       saveDeployments: true
@@ -19,7 +19,7 @@ module.exports = {
     },
     polygontestnet: {
       url: "https://polygon-mumbai.infura.io/v3/e0737333518f412892d21b1762e8fe47",
-      accounts: [""],
+      accounts: [process.env.mnemonic],
       chainId: 80001,
       live: true,
       saveDeployments: true
@@ -29,7 +29,7 @@ module.exports = {
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/7cd4731a3be74a6ab7c32fe799ab3177`,
-      accounts: [""],
+      accounts: [process.env.mnemonic],
       gasPrice: 120 * 1000000000
       // chainId: 1,
     }
