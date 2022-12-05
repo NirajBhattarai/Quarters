@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.0;
 
 import "./ISwap.sol";
@@ -5,7 +6,7 @@ import "./access/Ownable.sol";
 import "./token/ERC20/ERC20.sol";
 import "./ISwapRouter.sol";
 
-contract Swap is Ownable {
+contract Swap is ISwap, Ownable {
     /**
      * Factory Address involved in token Swap
      */
@@ -18,7 +19,7 @@ contract Swap is Ownable {
         address tokenA,
         address tokenB,
         uint amountIn
-    ) public {
+    ) public override {
         ERC20(tokenA).transferFrom(msg.sender, address(this), amountIn);
         ERC20(tokenA).approve(FACTORY_ADDRESS, amountIn);
 
