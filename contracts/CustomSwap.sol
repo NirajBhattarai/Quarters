@@ -3,8 +3,7 @@ pragma solidity 0.8.0;
 
 import "./ISwap.sol";
 import "./access/Ownable.sol";
-import "./token/ERC20/ERC20.sol";
-import "./ISwapRouter.sol";
+import "./token/ERC20/IERC20.sol";
 
 contract CustomSwap is ISwap, Ownable {
     /**
@@ -32,8 +31,8 @@ contract CustomSwap is ISwap, Ownable {
         address tokenB,
         uint amountIn
     ) public override {
-        ERC20(tokenA).transferFrom(msg.sender, address(this), amountIn);
+        IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn);
         uint256 exchangeAmount = amountIn * exchangeRate;
-        ERC20(tokenB).transferFrom(masterWallet, msg.sender, exchangeAmount);
+        IERC20(tokenB).transferFrom(masterWallet, msg.sender, exchangeAmount);
     }
 }

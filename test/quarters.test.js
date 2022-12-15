@@ -128,6 +128,7 @@ describe("Quarters", () => {
       await expect(deployedQuarters.connect(addr1).withdraw(1000))
         .to.emit(deployedQuarters, "Withdraw")
         .withArgs(addr1.address, unitEarning * 1000);
+      expect(await deployedQuarters.balanceOf(addr1.address)).to.equal(9000);
     });
   });
 
