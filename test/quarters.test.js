@@ -16,10 +16,12 @@ describe("Quarters", () => {
   let swap;
   const nonce =
     "0x0000000000000000000000000000000000000000000000000000000000000000";
+  let customSwapContract;
 
   beforeEach(async function () {
     const Quarters = await ethers.getContractFactory("Quarters");
     const testToken = await ethers.getContractFactory("TestToken");
+    customSwapContract = await ethers.getContractFactory("CustomSwap");
     usdt = await testToken.deploy();
     q2 = await testToken.deploy();
     swap = await testToken.deploy();
@@ -126,6 +128,7 @@ describe("Quarters", () => {
       await expect(deployedQuarters.connect(addr1).withdraw(1000))
         .to.emit(deployedQuarters, "Withdraw")
         .withArgs(addr1.address, unitEarning * 1000);
+      expect(await deployedQuarters.balanceOf(addr1.address)).to.equal(9000);
     });
   });
 
@@ -147,6 +150,23 @@ describe("Quarters", () => {
       await usdt.approve(deployedQuarters.address, "1000000000000000000000000");
 
       await swap.mock.exchange.returns();
+      await deployedQuarters.changeSwapAddress(swap.address);
+      await expect(deployedQuarters.buy(1000000))
+        .to.emit(deployedQuarters, "QuartersOrdered")
+        .withArgs(owner.address, 1000000, rate);
+      const balance = await deployedQuarters.balanceOf(owner.address);
+      expect(balance).to.equal(rate);
+    });
+
+    it("Mint Token If User Have Given Allowance and Have Sufficient USDT", async function () {
+      swap = await customSwapContract.deploy(owner.address);
+      const rate = await deployedQuarters.usdtRate();
+      await usdt.approve(deployedQuarters.address, "1000000000000000000000000");
+
+      await q2.approve(
+        swap.address,
+        "1000000000000000000000000000000000000000000000000000000000000000000000000"
+      );
       await deployedQuarters.changeSwapAddress(swap.address);
       await expect(deployedQuarters.buy(1000000))
         .to.emit(deployedQuarters, "QuartersOrdered")
